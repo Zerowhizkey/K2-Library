@@ -12,7 +12,7 @@ const db = new sqlite3.Database("./db.sqlite", (error) => {
         title TEXT,
         author TEXT,
         published TEXT,
-        pages TEXT,
+        pages TEXT
     )
     `;
 
