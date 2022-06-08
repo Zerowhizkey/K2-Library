@@ -37,7 +37,7 @@ async function removeSingleBook(req, res) {
 
 async function fullEditBook(req, res) {
 	if (
-		!req.params.id ||
+		// !req.params.id ||
 		!req.body.title ||
 		!req.body.author ||
 		!req.body.pages
@@ -56,12 +56,7 @@ async function fullEditBook(req, res) {
 }
 
 async function editBook(req, res) {
-	if (
-		!req.params.id
-		// !req.body.title ||
-		// !req.body.author ||
-		// !req.body.pages
-	) {
+	if (!req.body.title && !req.body.author && !req.body.pages) {
 		return res.status(400).json({ message: "u suckie" });
 	}
 	model.edit(req.params.id, req.body.title, req.body.author, req.body.pages);
