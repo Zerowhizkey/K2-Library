@@ -14,7 +14,7 @@ function getAll() {
 	});
 }
 
-function getSingle() {
+function getSingle(id) {
 	const sql = "SELECT * FROM books WHERE id = ?";
 	return new Promise((resolve, reject) => {
 		db.get(sql, id, (error, rows) => {
@@ -31,12 +31,27 @@ function addOne(book) {
 	const sql = "INSERT INTO books (title, author, pages) VALUES (?, ?, ?)";
 
 	return new Promise((resolve, reject) => {
-		db.run(sql, [book.title, book.author, book.pages], (error) => {
+		db.run(sql, [book.title, book.author, book.pages], function (error) {
 			if (error) {
 				console.error(error.message);
 				reject(error);
 			}
-			resolve();
+			resolve(this);
+		});
+	});
+}
+
+function deleteOne(id) {
+	const sql = "DELETE FROM books WHERE id = ?";
+
+	return new Promise((resolve, reject) => {
+		db.run(sql, id, function (error) {
+			if (error) {
+				console.log(error.message);
+				reject(error);
+			}
+
+			resolve(this);
 		});
 	});
 }
@@ -45,4 +60,5 @@ module.exports = {
 	getAll,
 	getSingle,
 	addOne,
+	deleteOne,
 };
