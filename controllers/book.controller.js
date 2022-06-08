@@ -35,9 +35,46 @@ async function removeSingleBook(req, res) {
 	res.status(200).json({ message: "succesfully deleted!" });
 }
 
+async function fullEditBook(req, res) {
+	if (
+		!req.params.id ||
+		!req.body.title ||
+		!req.body.author ||
+		!req.body.pages
+	) {
+		return res.status(400).json({ message: "u suckie" });
+	}
+	model.fullEdit(
+		req.params.id,
+		req.body.title,
+		req.body.author,
+		req.body.pages
+	);
+	const result = await model.getSingle(req.params.id);
+
+	res.status(200).json({ message: "u goodie!", updated: req.body });
+}
+
+async function editBook(req, res) {
+	if (
+		!req.params.id
+		// !req.body.title ||
+		// !req.body.author ||
+		// !req.body.pages
+	) {
+		return res.status(400).json({ message: "u suckie" });
+	}
+	model.edit(req.params.id, req.body.title, req.body.author, req.body.pages);
+	const result = await model.getSingle(req.params.id);
+	console.log(result);
+	res.status(200).json({ message: "u goodie!", updated: req.body });
+}
+
 module.exports = {
 	getAllBooks,
 	getSingleBooks,
 	postBook,
 	removeSingleBook,
+	fullEditBook,
+	editBook,
 };

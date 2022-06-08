@@ -56,9 +56,41 @@ function deleteOne(id) {
 	});
 }
 
+function fullEdit(id, title, author, pages) {
+	const sql =
+		"UPDATE books SET title = ?, author = ?, pages = ? WHERE id = ?";
+
+	return new Promise((resolve, reject) => {
+		db.run(sql, [title, author, pages, id], function (error) {
+			if (error) {
+				console.log(error.message);
+				reject(error);
+			}
+			resolve(this);
+		});
+	});
+}
+
+function edit(id, title, author, pages) {
+	const sql =
+		"UPDATE books SET title = COALESCE(?, title), author = COALESCE(?, author), pages = COALESCE(?, pages) WHERE id = ?";
+
+	return new Promise((resolve, reject) => {
+		db.run(sql, [title, author, pages, id], function (error) {
+			if (error) {
+				console.log(error.message);
+				reject(error);
+			}
+			resolve(this);
+		});
+	});
+}
+
 module.exports = {
 	getAll,
 	getSingle,
 	addOne,
 	deleteOne,
+	fullEdit,
+	edit,
 };
