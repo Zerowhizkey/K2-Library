@@ -2,19 +2,27 @@ const model = require("../models/book");
 
 async function getAllBooks(req, res) {
 	const books = await model.getAll();
-	res.json(books);
+	if (!books) {
+		return res.status(400).json({ message: "buhu u suckie" });
+	}
+
+	res.status(200).json({ message: "goodie", books });
 }
 
 async function getSingleBooks(req, res) {
 	const book = await model.getSingle(req.params.id);
-	res.json(book);
+	if (!req.params.id || !book) {
+		return res.status(400).json({ message: "suckie suckie againi" });
+	}
+	res.status(200).json({ message: "woho goodie", book });
 }
 
 async function postBook(req, res) {
 	const { title, author, pages } = req.body;
 
 	if (!title || !author || !pages) {
-		res.status(400).send("You got to send all Input");
+		res.status(400).json({ message: "You got to send all Input" });
+		return;
 	}
 
 	const newBook = {
@@ -24,7 +32,8 @@ async function postBook(req, res) {
 	};
 
 	const result = await model.addOne(newBook);
-	res.json({ id: result.lastID, ...newBook });
+
+	res.status(201).json({ message: "yay", id: result.lastID, ...newBook });
 }
 
 async function removeSingleBook(req, res) {
@@ -36,13 +45,9 @@ async function removeSingleBook(req, res) {
 }
 
 async function fullEditBook(req, res) {
-	if (
-		// !req.params.id ||
-		!req.body.title ||
-		!req.body.author ||
-		!req.body.pages
-	) {
-		return res.status(400).json({ message: "u suckie" });
+	if (!req.body.title || !req.body.author || !req.body.pages) {
+		res.status(400).json({ message: "u suckie" });
+		return;
 	}
 	model.fullEdit(
 		req.params.id,
@@ -51,16 +56,26 @@ async function fullEditBook(req, res) {
 		req.body.pages
 	);
 	const result = await model.getSingle(req.params.id);
-
+	console.log(result);
+	if (!result) {
+		res.status(400).json({ message: "fuck off! u suckie" });
+		return;
+	}
+	console.log(result);
 	res.status(200).json({ message: "u goodie!", updated: req.body });
 }
 
 async function editBook(req, res) {
 	if (!req.body.title && !req.body.author && !req.body.pages) {
-		return res.status(400).json({ message: "u suckie" });
+		res.status(400).json({ message: "u suckie" });
+		return;
 	}
 	model.edit(req.params.id, req.body.title, req.body.author, req.body.pages);
 	const result = await model.getSingle(req.params.id);
+	if (!result) {
+		res.status(400).json({ message: "fuck off! u suckie" });
+		return;
+	}
 	console.log(result);
 	res.status(200).json({ message: "u goodie!", updated: req.body });
 }
