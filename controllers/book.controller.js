@@ -5,6 +5,11 @@ async function getAllBooks(req, res) {
 	if (!books) {
 		return res.status(400).json({ error: "Cannot get Books" });
 	}
+	if (books.length === 0) {
+		return res
+			.status(200)
+			.json({ status: "There are no books in the library" });
+	}
 
 	res.status(200).json({ status: "Request successfull", books });
 }
@@ -22,6 +27,11 @@ async function postBook(req, res) {
 
 	if (!title || !author || !pages) {
 		res.status(400).json({ error: "Bad request" });
+		return;
+	}
+	const existingBook = await model.getTitle(title);
+	if (existingBook) {
+		res.status(400).json({ error: "Book already exists" });
 		return;
 	}
 

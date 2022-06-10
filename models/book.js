@@ -86,6 +86,19 @@ function edit(id, title, author, pages) {
 	});
 }
 
+function getTitle(title) {
+	const sql = "SELECT * FROM books WHERE title = ?";
+	return new Promise((resolve, reject) => {
+		db.get(sql, title, (error, rows) => {
+			if (error) {
+				console.error(error.message);
+				reject(error);
+			}
+			resolve(rows);
+		});
+	});
+}
+
 module.exports = {
 	getAll,
 	getSingle,
@@ -93,4 +106,5 @@ module.exports = {
 	deleteOne,
 	fullEdit,
 	edit,
+	getTitle,
 };
