@@ -1,5 +1,5 @@
 const sqlite3 = require("sqlite3").verbose();
-const md5 = require("md5");
+// const md5 = require("md5");
 
 const db = new sqlite3.Database("./db.sqlite", (error) => {
 	if (error) {
@@ -36,20 +36,21 @@ const db = new sqlite3.Database("./db.sqlite", (error) => {
 		if (error) {
 			console.error(error.message);
 			// throw error;
-		} else {
-			const insert =
-				"INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-			db.run(
-				insert,
-				["ryandahl", "ryan@dahl.dk", md5("Macke123")],
-				(error) => {
-					if (error) {
-						console.error(error.message);
-					}
-				}
-			);
 		}
 	});
 });
+// } else {
+// 	const insert =
+// 		"INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+// 	db.run(
+// 		insert,
+// 		["ryandahl", "ryan@dahl.dk", md5("Macke123")],
+// 		(error) => {
+// 			if (error) {
+// 				// console.error(error.message);
+// 			}
+// 		}
+// 	);
+// }
 
 module.exports = db;
